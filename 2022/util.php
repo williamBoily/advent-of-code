@@ -1,9 +1,9 @@
 <?php
 
 function getInputFile($basePath, $type){
-	if($type == 'test'){
-		return $basePath . "/input_example.txt";
+	if($type == 'real'){
+		return $basePath . "/input.txt";
 	}
 
-	return $basePath . "/input.txt";
+	return $basePath . "/input_example.txt";
 }
