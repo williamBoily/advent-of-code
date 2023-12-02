@@ -12,6 +12,14 @@ if(false === $inputs){
 	exit;
 }
 
-echo "done";
+$total = 0;
+foreach ($inputs as $key => $line) {
+	$digits = preg_replace('/\D/', '', $line);
+	$digits =  substr($digits, 0, 1) . substr($digits, -1);
+
+	$total += $digits;
+}
+
+echo "$total";
 echo PHP_EOL;
 exit;
