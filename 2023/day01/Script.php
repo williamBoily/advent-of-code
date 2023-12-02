@@ -51,5 +51,9 @@ class Script {
 		echo "{$this->fileColorCode}$file\033[0m\n";
 	}
 
+	public function nanoToSec($nano) {
+		return $nano / 1000000000;
+	}
+
 }
 

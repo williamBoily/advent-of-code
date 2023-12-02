@@ -12,43 +12,69 @@ if(false === $inputs){
 	exit;
 }
 
-$numbersMap = [
-	'one' => 1,
-	'two' => 2,
-	'three' => 3,
-	'four' => 4,
-	'five' => 5,
-	'six' => 6,
-	'seven' => 7,
-	'eight' => 8,
-	'nine' => 9,
+$nano_start = hrtime(true);
+
+$stringNumbers = [
+	'one',
+	'two',
+	'three',
+	'four',
+	'five',
+	'six',
+	'seven',
+	'eight',
+	'nine',
 ];
+
+$numbers = array_combine(range('1','9'), $stringNumbers);
 
 $total = 0;
 foreach ($inputs as $key => $line) {
-	$digitsOnlyLine = '';
-	$size = strlen($line);
-	for ($i=0; $i < $size; $i++) { 
-		if(is_numeric($line[$i])){
-			$digitsOnlyLine .= $line[$i];
-			continue;
+
+	$a = $b = null;
+	$aDigit = $bDigit = '';
+
+	foreach ($numbers as $numeric => $string) {
+		$offset = 0;
+		while(isset($line[$offset]) && false !== ($pos = strpos($line, $numeric, $offset))){
+			if($a === null || $pos < $a){
+				$a = $pos;
+				$aDigit = $numeric;
+			}
+
+			if($b === null || $pos > $b){
+				$b = $pos;
+				$bDigit = $numeric;
+			}
+
+			$offset = $pos + 1;
 		}
 
-		foreach ($numbersMap as $stringNumber => $value) {
-			if($i === strpos($line, $stringNumber, $i)){
-				$digitsOnlyLine .= $value;
-				break;
+		$offset = 0;
+		while(isset($line[$offset]) && false !== ($pos = strpos($line, $string, $offset))){
+			if($a === null || $pos < $a){
+				$a = $pos;
+				$aDigit = $numeric;
 			}
+
+			if($b === null || $pos > $b){
+				$b = $pos;
+				$bDigit = $numeric;
+			}
+
+			$offset = $pos + 1;
 		}
 	}
 	
-	$digits = substr($digitsOnlyLine, 0, 1) . substr($digitsOnlyLine, -1);
-	
-	echo "$digits\n";
+	$digits = $aDigit . $bDigit;
 
 	$total += $digits;
 }
 
-echo "$total";
-echo PHP_EOL;
+echo "$total\n";
+
+$nano_end = hrtime(true);
+$nano_time = $nano_end - $nano_start;
+$time = $script->nanoToSec($nano_time);
+echo "sec:$time\n";
 exit;
