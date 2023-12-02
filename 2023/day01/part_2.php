@@ -12,63 +12,38 @@ if(false === $inputs){
 	exit;
 }
 
-$stringNumbers = [
-	'one',
-	'two',
-	'three',
-	'four',
-	'five',
-	'six',
-	'seven',
-	'eight',
-	'nine',
+$numbersMap = [
+	'one' => 1,
+	'two' => 2,
+	'three' => 3,
+	'four' => 4,
+	'five' => 5,
+	'six' => 6,
+	'seven' => 7,
+	'eight' => 8,
+	'nine' => 9,
 ];
-
-$numbers = array_combine(range('1','9'), $stringNumbers);
 
 $total = 0;
 foreach ($inputs as $key => $line) {
-
-	$a = $b = null;
-	$aDigit = $bDigit = '';
-
-	foreach ($numbers as $numeric => $string) {
-		$offset = 0;
-		while(isset($line[$offset]) && false !== ($pos = strpos($line, $numeric, $offset))){
-			if($a === null || $pos < $a){
-				$a = $pos;
-				$aDigit = $numeric;
-				echo 'numeric $aDigit = ' . $numeric . PHP_EOL;
-			}
-
-			if($b === null || $pos > $b){
-				$b = $pos;
-				echo 'numeric $bDigit = ' . $numeric . PHP_EOL;
-				$bDigit = $numeric;
-			}
-
-			$offset = $pos + 1;
+	$digitsOnlyLine = '';
+	$size = strlen($line);
+	for ($i=0; $i < $size; $i++) { 
+		if(is_numeric($line[$i])){
+			$digitsOnlyLine .= $line[$i];
+			continue;
 		}
 
-		$offset = 0;
-		while(isset($line[$offset]) && false !== ($pos = strpos($line, $string, $offset))){
-			if($a === null || $pos < $a){
-				$a = $pos;
-				echo 'string $aDigit = ' . "$string($numeric)" . PHP_EOL;
-				$aDigit = $numeric;
+		foreach ($numbersMap as $stringNumber => $value) {
+			if($i === strpos($line, $stringNumber, $i)){
+				$digitsOnlyLine .= $value;
+				break;
 			}
-
-			if($b === null || $pos > $b){
-				$b = $pos;
-				echo 'string $bDigit = ' . "$string($numeric)" . PHP_EOL;
-				$bDigit = $numeric;
-			}
-
-			$offset = $pos + 1;
 		}
 	}
 	
-	$digits = $aDigit . $bDigit;
+	$digits = substr($digitsOnlyLine, 0, 1) . substr($digitsOnlyLine, -1);
+	
 	echo "$digits\n";
 
 	$total += $digits;
